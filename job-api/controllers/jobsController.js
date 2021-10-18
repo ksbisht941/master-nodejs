@@ -1,6 +1,7 @@
 const Jobs = require("./../models/jobsModel");
 const catchAsync = require("../utils/catchAsync");
 const APIFeatures = require("../utils/apiFeatures");
+const AppError = require("../../store-api/utils/appError");
 
 exports.getAllJobs = catchAsync(async (req, res, next) => {
   const features = new APIFeatures(Jobs.find(), req.query)
@@ -12,11 +13,27 @@ exports.getAllJobs = catchAsync(async (req, res, next) => {
   const jobs = await features.query;
 
   res.status(200).json({
-    jobs,
+    code: 200,
+    status: "success",
+    data: jobs,
   });
 });
 
-exports.getJob = catchAsync(async (req, res, next) => {});
+exports.getJob = catchAsync(async (req, res, next) => {
+  const { id: jobId } = req.params;
+
+  const job = await Jobs.findOne({ _id: jobId });
+
+  if (!job) {
+    return next(new AppError(`No job found with this id: ${jobId}`, 404));
+  }
+
+  res.status(200).json({
+    code: 200,
+    status: "success",
+    data: job,
+  });
+});
 
 exports.createJobs = catchAsync(async (req, res, next) => {
   req.body.createdBy = req.user._id;
@@ -29,6 +46,37 @@ exports.createJobs = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.updateJob = catchAsync(async (req, res, next) => {});
+exports.updateJob = catchAsync(async (req, res, next) => {
+  const { id: jobId } = req.params;
 
-exports.deleteJob = catchAsync(async (req, res, next) => {});
+  const job = await Jobs.findByIdAndUpdate({ _id: jobId }, req.body, {
+    new: true,
+    runValidators: true
+  });
+
+  if (!job) {
+    return next(new AppError(`No job found with this id: ${jobId}`, 404));
+  }
+
+  res.status(200).json({
+    code: 200,
+    status: "success",
+    data: job,
+  });
+});
+
+exports.deleteJob = catchAsync(async (req, res, next) => {
+  const { id: jobId } = req.params;
+
+  const job = await Jobs.findByIdAndDelete({ _id: jobId });
+
+  if (!job) {
+    return next(new AppError(`No job found with this id: ${jobId}`, 404));
+  }
+
+  res.status(200).json({
+    code: 200,
+    status: "success",
+    message: "Job delete successfully"
+  });
+});
