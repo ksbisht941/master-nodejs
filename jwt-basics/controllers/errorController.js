@@ -1,4 +1,5 @@
 const sendErrorDev = (err, res) => {
+  console.log("status code", err.statusCode);
   res.status(err.statusCode).json({
     code: err.statusCode,
     status: err.status,
@@ -17,13 +18,11 @@ const sendErrorProd = (err, res) => {
 };
 
 module.exports = (err, req, res, next) => {
+  console.log(err);
   if (process.env.NODE_ENV == "development") {
     sendErrorDev(err, res);
   } else if (process.env.NODE_ENV == "production") {
-    let error = err;
-
-    console.log(error.code);
-    console.log(error.name);
+    // let error = err;
 
     sendErrorProd(err, res);
   }
