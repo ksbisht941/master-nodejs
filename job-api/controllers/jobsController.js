@@ -12,6 +12,10 @@ exports.getAllJobs = catchAsync(async (req, res, next) => {
 
   const jobs = await features.query;
 
+  if (!jobs.length) {
+    return next(new AppError(`No job created yet`, 404));
+  }
+
   res.status(200).json({
     code: 200,
     status: "success",

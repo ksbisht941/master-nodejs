@@ -1,28 +1,45 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
-const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, "Please provide name"],
-    maxlength: 50,
-    minlength: 3,
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Please provide name"],
+      maxlength: 50,
+      minlength: 3,
+    },
+    email: {
+      type: String,
+      required: [true, "Please provide email"],
+      match: [
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+        "Please provide a valid email",
+      ],
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: [true, "Please provide password"],
+      minlength: 6,
+      select: false
+    },
+    passwordChangedAt: Date,
   },
-  email: {
-    type: String,
-    required: [true, "Please provide email"],
-    match: [
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-      "Please provide a valid email",
-    ],
-    unique: true,
-  },
-  password: {
-    type: String,
-    required: [true, "Please provide password"],
-    minlength: 6,
-  },
-  passwordChangedAt: Date,
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
+);
+
+userSchema.virtual("test").get(function(){
+  return "text"
+});
+
+userSchema.virtual("jobCreate", {
+  ref: "Jobs",
+  foreignField: "createdBy",
+  localField: '_id'
 });
 
 userSchema.pre("save", async function (next) {
@@ -33,8 +50,8 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-userSchema.pre('save', function(next) {
-  if (!this.isModified('password') || this.isNew) return next();
+userSchema.pre("save", function (next) {
+  if (!this.isModified("password") || this.isNew) return next();
 
   this.passwordChangedAt = Date.now() - 1000;
   next();
