@@ -2,8 +2,8 @@ const express = require("express");
 const morgan = require("morgan");
 const dotenv = require("dotenv");
 
-const userRoutes = require("userRoutes");
-const jobsRoutes = require("jobsRoutes");
+const userRoutes = require("./routes/userRoutes");
+const jobsRoutes = require("./routes/jobsRoutes");
 
 const app = express();
 
