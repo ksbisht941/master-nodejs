@@ -15,6 +15,19 @@ dotenv.config({ path: "./config.env" });
 
 app.use(express.json());
 
+// Prevent parameter pollution
+app.use(
+    hpp({
+      whitelist: [
+        'name',
+        'price',
+        'featured',
+        'rating',
+        'company'
+      ]
+    })
+  );
+
 // Serving static files
 app.use(express.static(`${__dirname}/public`));
 

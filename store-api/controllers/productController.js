@@ -1,9 +1,9 @@
-const { asyncCatch } = require("../middlewares/asyncCatch");
+const catchAsync = require("../middlewares/catchAsync");
 const Product = require("../models/productModel");
 const AppError = require("../utils/appError");
 const APIFeatures = require("../utils/apiFeatures");
 
-exports.getAllProduct = asyncCatch(async (req, res, next) => {
+exports.getAllProduct = catchAsync(async (req, res, next) => {
   const features = new APIFeatures(Product.find(), req.query)
     .filter()
     .sort()
@@ -21,7 +21,7 @@ exports.getAllProduct = asyncCatch(async (req, res, next) => {
   });
 });
 
-exports.getProduct = asyncCatch(async (req, res, next) => {
+exports.getProduct = catchAsync(async (req, res, next) => {
   const { id: productId } = req.params;
 
   const product = Product.findOne({ _id: productId });
@@ -36,7 +36,7 @@ exports.getProduct = asyncCatch(async (req, res, next) => {
   });
 });
 
-exports.addProduct = asyncCatch(async (req, res, next) => {
+exports.addProduct = catchAsync(async (req, res, next) => {
   const task = await Product.create(req.body);
   res.status(201).json({
     code: 201,
@@ -46,7 +46,7 @@ exports.addProduct = asyncCatch(async (req, res, next) => {
   });
 });
 
-exports.updateProduct = asyncCatch(async (req, res, next) => {
+exports.updateProduct = catchAsync(async (req, res, next) => {
   const { id: productId } = req.params;
   const task = await Product.findByIdAndUpdate({ _id: productId }, req.body);
 
@@ -58,7 +58,7 @@ exports.updateProduct = asyncCatch(async (req, res, next) => {
   });
 });
 
-exports.deleteProduct = asyncCatch(async (req, res, next) => {
+exports.deleteProduct = catchAsync(async (req, res, next) => {
   const { id: productId } = req.params;
   const product = Product.findByIdAndDelete({ _id: productId });
 
