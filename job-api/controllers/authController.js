@@ -1,7 +1,9 @@
-exports.register = async(req, res, next) => {
-    
-}
+const catchAsync = require("../utils/catchAsync");
 
-exports.login = async(req, res, next) => {
+exports.register = catchAsync(async(req, res, next) => {
     
-}
+})
+
+exports.login = catchAsync(async(req, res, next) => {
+    
+})

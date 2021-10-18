@@ -1,19 +1,21 @@
-exports.getAllJobs = async(req, res, next) => {
-    
-}
+const catchAsync = require("../utils/catchAsync");
 
-exports.getJob = async(req, res, next) => {
+exports.getAllJobs = catchAsync(async(req, res, next) => {
 
-}
+})
 
-exports.createJobs = async(req, res, next) => {
+exports.getJob = catchAsync(async(req, res, next) => {
 
-}
+})
 
-exports.updateJob = async(req, res, next) => {
+exports.createJobs = catchAsync(async(req, res, next) => {
 
-}
+})
 
-exports.deleteJob = async(req, res, next) => {
+exports.updateJob = catchAsync(async(req, res, next) => {
 
-}
+})
+
+exports.deleteJob = catchAsync(async(req, res, next) => {
+
+})
