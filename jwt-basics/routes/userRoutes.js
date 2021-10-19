@@ -10,4 +10,6 @@ router.route("/updatePassword").post(authController.updatePassword);
 router.route("/resetPassword").post(authController.resetPassword);
 router.route("/forgotPassword").post(authController.forgotPassword);
 
+router.route("/luckyNumber").get(authController.getLuckyNumber);
+
 module.exports = router;

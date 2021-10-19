@@ -9,7 +9,7 @@ exports.getAllTasks = catchAsync(async (req, res, next) => {
     res.status(404).json({
       code: 404,
       status: "failure",
-      message: `No task found with this id: ${req.params.id}`,
+      message: `No task created yet.`,
     });
   }
 

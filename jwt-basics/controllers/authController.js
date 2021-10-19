@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 
+const { promisify } = require('util');
 const catchAsync = require("../utils/catchAsync");
 const User = require("../models/userModel");
 const AppError = require("../utils/appError");
@@ -26,11 +27,11 @@ const createSendToken = (user, statusCode, res) => {
   user.password = undefined;
 
   res.status(statusCode).json({
-    status: 'success',
+    status: "success",
     token,
     data: {
-      user
-    }
+      user,
+    },
   });
 };
 
@@ -39,7 +40,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     name: req.body.name,
     email: req.body.email,
     password: req.body.password,
-    confirmPassword: req.body.confirmPassword
+    confirmPassword: req.body.confirmPassword,
   });
 
   createSendToken(newUser, 201, res);
@@ -68,3 +69,9 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {});
 exports.resetPassword = catchAsync(async (req, res, next) => {});
 
 exports.updatePassword = catchAsync(async (req, res, next) => {});
+
+exports.getLuckyNumber = catchAsync(async (req, res, next) => {
+  res.status(200).json({
+    message: "Hello",
+  });
+});
